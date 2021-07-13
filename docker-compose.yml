@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command:
+      - uvicorn
+      - api:main
+      - --host=0.0.0.0
+      - --workers=2
+      - --reload
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./
+        target: /app/
+    depends_on:
+      - tfserving
+      - torchserve
+    environment:
+      - TFSERVING_SERVICE_URL=http://tfserving:8501/v1/models/resnet_50_classification:predict
+      - TORCHSERVE_SERVICE_URL=http://torchserve:8080/predictions/resnet-50
+      - TRITON_SERVICE_URL=http://foo
+    restart: on-failure
+
+  tfserving:
+    image: tensorflow/serving:2.5.1
+    command:
+      - --model_name=resnet_50_classification
+      - --model_base_path=/models/
+      - --max_num_load_retries=0
+      - --file_system_poll_wait_seconds=0
+      - --enable_model_warmup=true
+      - --per_process_gpu_memory_fraction=1.0
+      - --flush_filesystem_caches=false
+      - --load_retry_interval_micros=-1
+      - --model_config_file_poll_wait_seconds=0
+      - --port=9000
+      - --rest_api_port=8501
+    volumes:
+      - type: bind
+        source: ./models/tfserving/
+        target: /models/
+        read_only: true
+    expose:
+      - 8501
+    restart: on-failure
+
+  torchserve:
+    image: pytorch/torchserve:0.4.0-cpu
+    command:
+      - torchserve
+      - --model-store=/models/
+      - --start
+      - --foreground
+      - --models=all
+      - --ts-config=/models/config.properties
+    volumes:
+      - type: bind
+        source: ./models/torchserve/
+        target: /models/
+        read_only: true
+    expose:
+      - 8080
+    restart: on-failure
