@@ -72,7 +72,7 @@ services:
     command:
       - tritonserver
       - --model-repository=/models/
-      - --model-control-mode=explicit
+      - --model-control-mode=none
       - --allow-grpc=false
       - --allow-http=true
       - --allow-metrics=true
