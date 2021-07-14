@@ -14,8 +14,8 @@ from ..types import ModelInferenceCallbackProtocol, Servings
 AVAILABLE_SERVINGS: Final[Dict[Servings, Tuple[ModelInferenceCallbackProtocol, AnyUrl]]] = {
     Servings.tfserving: (tfserving_inference, get_settings().tfserving_service_url),
     Servings.torchserve: (torchserve_inference, get_settings().torchserve_service_url),
-    Servings.triton_tensorflow: (triton_tensorflow_inference, get_settings().triton_service_url),
-    Servings.triton_pytorch: (triton_pytorch_inference, get_settings().triton_service_url),
+    Servings.triton_tensorflow: (triton_tensorflow_inference, get_settings().triton_service_host),
+    Servings.triton_pytorch: (triton_pytorch_inference, get_settings().triton_service_host),
 }
 
 __all__ = ("AVAILABLE_SERVINGS",)

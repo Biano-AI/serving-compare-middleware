@@ -16,9 +16,9 @@ logger: Final = logging.getLogger(__name__)
 
 
 async def make_httpx_client():
-    return httpx.AsyncClient()
+    return httpx.AsyncClient(timeout=10.0)
 
 
 @cache
-async def make_triton_client() -> InferenceServerClient:
+def make_triton_client() -> InferenceServerClient:
     return InferenceServerClient(url=get_settings().triton_service_url)
