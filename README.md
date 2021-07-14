@@ -52,12 +52,16 @@ TRITON_SERVICE_URL = "http://..."
 
 ## How to develop
 
-Supported Python version is `3.9`.
+Supported Python version is `3.9` (Standard CPython). Unfortunately the NVIDIA Triton client [does not support](https://github.com/triton-inference-server/client#download-using-python-package-installer-pip) (July 2021) Windows (at least not with `pip install ...`). All other dependencies are independent of the operating system.
+
+### Local development
 
 1. Create and activate [virtual environment](https://docs.python.org/3/library/venv.html)
 2. Install `pip install nvidia-pyindex` to install the NVIDIA Triton client from the NVIDIA Private Python Package Index 
 3. Install Python dependencies: `pip install -r requirements.txt`
 4. Start the application server: `uvicorn api:main --workers=2 --reload`
+
+### Docker Compose
 
 This project can also be developed and executed using [Docker Compose](https://docs.docker.com/compose/).
 
@@ -70,7 +74,6 @@ docker-compose up --build
 Then open [http://127.0.0.1:8000/docs]() .
 
 :point_right: **Important note:** Docker Compose will start all three servings at once. This can be very resource intensive on your computer.
-
 
 ## License
 
