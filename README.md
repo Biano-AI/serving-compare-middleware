@@ -9,7 +9,7 @@ This project has been created to support a paper to test the performance of sele
 
 ## Models
 
-All models can be downloaded here: [https://drive.google.com/drive/folders/11tMhfCH3n91noXD5mBLx8fRytEwPsKXm?usp=sharing]()
+:arrow_down: All models can be downloaded here: [https://drive.google.com/drive/folders/11tMhfCH3n91noXD5mBLx8fRytEwPsKXm?usp=sharing]()
 
 The final structure of the models folder must look like this:
 
