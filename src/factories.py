@@ -21,4 +21,4 @@ async def make_httpx_client():
 
 @cache
 def make_triton_client() -> InferenceServerClient:
-    return InferenceServerClient(url=get_settings().triton_service_url)
+    return InferenceServerClient(url=get_settings().triton_service_host)
