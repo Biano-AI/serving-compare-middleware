@@ -18,4 +18,5 @@ class ModelInferenceCallbackProtocol(Protocol):
 class Servings(str, Enum):
     tfserving = "tfserving"
     torchserve = "torchserve"
-    triton = "triton"
+    triton_tensorflow = "triton_tensorflow"
+    triton_pytorch = "triton_pytorch"
