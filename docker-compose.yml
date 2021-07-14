@@ -89,7 +89,7 @@ services:
       - 8000
     volumes:
       - type: bind
-        source: ./models/torchserve/
+        source: ./models/triton/
         target: /models/
         read_only: true
     restart: on-failure
