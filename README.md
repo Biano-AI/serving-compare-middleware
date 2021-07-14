@@ -69,7 +69,7 @@ docker-compose up --build
 
 Then open [http://127.0.0.1:8000/docs]() .
 
-:point_right: **Important note:** Docker Compose will start all three servlets at once. This can be very resource intensive on your computer.
+:point_right: **Important note:** Docker Compose will start all three servings at once. This can be very resource intensive on your computer.
 
 
 ## License
