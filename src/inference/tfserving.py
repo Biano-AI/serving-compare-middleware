@@ -10,12 +10,10 @@ import numpy as np
 from httpx import AsyncClient
 from PIL import Image
 
-from src.types import ModelOutput
-
 logger: Final = logging.getLogger(__name__)
 
 
-async def tfserving_inference(client: AsyncClient, image_content: BinaryIO, url: str) -> ModelOutput:
+async def tfserving_inference(client: AsyncClient, image_content: BinaryIO, url: str) -> None:
     """
     Source:
         https://raw.githubusercontent.com/tensorflow/serving/master/tensorflow_serving/example/resnet_client.py
@@ -25,5 +23,3 @@ async def tfserving_inference(client: AsyncClient, image_content: BinaryIO, url:
 
     response = await client.post(url, json={"instances": jpeg_rgb})
     response.raise_for_status()
-
-    return response.json()["predictions"][0]

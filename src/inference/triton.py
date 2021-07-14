@@ -25,6 +25,4 @@ async def triton_inference(image_content: BinaryIO, **kwargs):
     output = InferRequestedOutput("output__0")
     response = triton_client.infer("some model name", model_version=42, inputs=[infer_input], outputs=[output])
 
-    logits = response.as_numpy("output__0").tolist()
-
-    return logits
+    response.as_numpy("output__0").tolist()
