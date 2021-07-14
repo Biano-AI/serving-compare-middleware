@@ -9,28 +9,7 @@ This project has been created to support a paper to test the performance of sele
 
 ## Models
 
-https://drive.google.com/drive/folders/11tMhfCH3n91noXD5mBLx8fRytEwPsKXm?usp=sharing
-
-### Tensorflow serving
-
-Download https://tfhub.dev/tensorflow/resnet_50/classification/1 and extract it to `./models/tfserving/1/**`.
-
-### Torchserve
-
-Download https://hynek-pub.s3.eu-west-1.amazonaws.com/resnet-50.mar and put it to `./models/torchserve/resnet-50.mar`.
-
-Next, create configuration file `./models/torchserve/config.properties`:
-
-```properties
-inference_address=http://0.0.0.0:8080
-job_queue_size=100
-install_py_dep_per_model=true
-```
-
-### Triton
-
-TBD
-
+All models can be downloaded here: [https://drive.google.com/drive/folders/11tMhfCH3n91noXD5mBLx8fRytEwPsKXm?usp=sharing]()
 
 The final structure of the models folder must look like this:
 
@@ -44,9 +23,26 @@ The final structure of the models folder must look like this:
 │               variables.data-00000-of-00001
 │               variables.index
 │
-└───torchserve
-        config.properties
-        resnet-50.mar
+├───torchserve
+│       resnet-50.mar
+│
+└───triton
+    ├───resnet-50-tensorflow
+    │   │   config.pbtxt
+    │   │
+    │   └───1
+    │       └───model.savedmodel
+    │           │   saved_model.pb
+    │           │
+    │           └───variables
+    │                   variables.data-00000-of-00001
+    │                   variables.index
+    │
+    └───resnet-50-torch
+        │   config.pbtxt
+        │
+        └───1
+                model.pt
 ```
 
 ## Configuration
@@ -56,7 +52,7 @@ Create a file `.env` in the project root:
 ```dotenv
 TFSERVING_SERVICE_URL = "http://***:8501/v1/models/resnet_50_classification:predict"
 TORCHSERVE_SERVICE_URL = "http://***:8080/predictions/resnet-50"
-TRITON_SERVICE_URL = "http://..."
+TRITON_SERVICE_URL = "http://***:8000"
 ```
 
 ## How to develop
