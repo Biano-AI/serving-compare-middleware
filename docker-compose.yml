@@ -66,3 +66,30 @@ services:
     expose:
       - 8080
     restart: on-failure
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:21.05-py3
+    command:
+      - tritonserver
+      - --model-repository=/models/
+      - --model-control-mode=explicit
+      - --allow-grpc=false
+      - --allow-http=true
+      - --allow-metrics=true
+      - --allow-gpu-metrics=true
+      - --log-verbose=true
+      - --log-info=true
+      - --log-warning=true
+      - --log-error=true
+      - --exit-on-error=true
+      - --strict-model-config=true
+      - --strict-readiness=true
+      - --exit-timeout-secs=10
+    expose:
+      - 8000
+    volumes:
+      - type: bind
+        source: ./models/torchserve/
+        target: /models/
+        read_only: true
+    restart: on-failure

@@ -17,6 +17,8 @@ WORKDIR /app
 # ---------------------------------------------------------------------
 # 3. Requirements
 # ---------------------------------------------------------------------
+RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
+
 COPY ./requirements/production.txt /requirements/
 RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/production.txt \
     && rm -rf /requirements/production.txt
