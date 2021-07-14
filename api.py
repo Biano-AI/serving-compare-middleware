@@ -12,7 +12,12 @@ from src import common_router, factories
 
 logger: Final = logging.getLogger(__name__)
 
-main = FastAPI(title="TBD", description="TBD | Biano AI", version="0.1.0", redoc_url=None)
+main = FastAPI(
+    title="Servings middleware",
+    description="Unified API for ML models servings | Biano AI",
+    version="0.1.0",
+    redoc_url=None,
+)
 main.include_router(common_router.router, tags=["inference"])
 
 
