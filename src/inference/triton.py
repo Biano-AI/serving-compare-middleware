@@ -36,10 +36,10 @@ async def triton_pytorch_inference(image_content: BinaryIO, **kwargs):
 
     jpeg_rgb = Image.open(image_content).convert("RGB")
     jpeg_rgb.thumbnail((224, 224))
-    normalized_jpeg = (np.array(jpeg_rgb).astype(np.float32) - np.array([0.485, 0.456, 0.406])) / np.array(
+    normalized_jpeg = (np.array(jpeg_rgb) - np.array([0.485, 0.456, 0.406])) / np.array(
         [0.229, 0.224, 0.225]
     )
-    normalized_jpeg = np.expand_dims(np.einsum("ijk->kij", np.array(normalized_jpeg)), 0)
+    normalized_jpeg = np.expand_dims(np.einsum("ijk->kij", np.array(normalized_jpeg)), 0).astype(np.float32)
 
     infer_input = InferInput("input__0", [1, 3, 224, 224], "FP32")
     infer_input.set_data_from_numpy(normalized_jpeg)
