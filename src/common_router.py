@@ -9,7 +9,7 @@ from typing import cast, Final
 
 import httpx
 from fastapi import APIRouter, Depends, File, UploadFile
-from starlette.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse
 
 from src.dependencies import httpx_client
 from src.inference import AVAILABLE_SERVINGS
@@ -21,7 +21,7 @@ router: Final = APIRouter()
 
 @router.post(
     "/infer/{model_name}",
-    response_model=PlainTextResponse,
+    response_class=PlainTextResponse,
     summary="TBD",
 )
 async def _(
