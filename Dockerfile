@@ -29,6 +29,7 @@ RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-
 
 RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
 RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir tritonclient[http]
+
 # ---------------------------------------------------------------------
 # 4. App sources
 # ---------------------------------------------------------------------
