@@ -6,6 +6,19 @@ It allows the client to infer using a unified and very simple JSON API.
 
 This project has been created to support a paper to test the performance of selected serving tools. Therefore, the outputs from the models are gathered but not further parsed and returned to the client (in other words, the client just sends JPEGs and receives no results, only 200 HTTP responses).
 
+The resulting JSON API is really not complicated at all. All you need is a curl like this:
+
+```bash
+$ curl -vS http://localhost:8000/infer/${SERVING_TYPE} \
+        -F "image=@path/to/local/image.JPG"
+```
+
+Where `SERVING_TYPE` can be one of:
+
+* `torchserve`
+* `tfserving`
+* `triton_pytorch`
+* `triton_tensorflow`
 
 ## Models
 
