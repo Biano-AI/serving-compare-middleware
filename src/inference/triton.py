@@ -26,7 +26,8 @@ async def triton_tensorflow_inference(image_content: BinaryIO, **kwargs):
     infer_input.set_data_from_numpy(jpeg_rgb)
     output = InferRequestedOutput("activation_49")
     response = triton_client.infer("resnet-50-tensorflow", model_version=1, inputs=[infer_input], outputs=[output])
-    response.as_numpy("activation_49").tolist()
+
+    assert response.as_numpy("activation_49").tolist()
 
 
 async def triton_pytorch_inference(image_content: BinaryIO, **kwargs):
@@ -42,4 +43,4 @@ async def triton_pytorch_inference(image_content: BinaryIO, **kwargs):
     output = InferRequestedOutput("output__0")
     response = triton_client.infer("resnet-50-torch", model_version=1, inputs=[infer_input], outputs=[output])
 
-    response.as_numpy("output__0").tolist()
+    assert response.as_numpy("output__0").tolist()
