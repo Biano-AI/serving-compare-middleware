@@ -1,6 +1,15 @@
 # FastAPI middleware for comparing different ML model serving approaches
 
+This server, written in [FastAPI](https://fastapi.tiangolo.com/), serves as middleware between the client and selected ML model serving tools ([Tensorflow Serving](https://github.com/tensorflow/serving), [TorchServe](https://github.com/pytorch/serve) and [NVIDIA Triton](https://github.com/triton-inference-server/server)).
+
+It allows the client to infer using a unified and very simple JSON API.
+
+This project has been created to support a paper to test the performance of selected serving tools. Therefore, the outputs from the models are gathered but not further parsed and returned to the client (in other words, the client just sends JPEGs and receives no results, only 200 HTTP responses).
+
+
 ## Models
+
+https://drive.google.com/drive/folders/11tMhfCH3n91noXD5mBLx8fRytEwPsKXm?usp=sharing
 
 ### Tensorflow serving
 
