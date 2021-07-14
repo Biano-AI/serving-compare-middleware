@@ -27,6 +27,8 @@ COPY ./requirements/base.txt /requirements/
 RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/base.txt \
     && rm -rf /requirements/base.txt
 
+RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
+RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir tritonclient[http]
 # ---------------------------------------------------------------------
 # 4. App sources
 # ---------------------------------------------------------------------
