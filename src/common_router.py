@@ -47,7 +47,7 @@ async def _(
     return "OK"
 
 
-@router.post(
+@router.get(
     "/randinfer/{serving_type}",
     response_class=PlainTextResponse,
     summary="Performs inference for an image",
