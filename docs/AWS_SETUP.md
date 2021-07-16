@@ -78,7 +78,7 @@ Let's create two instances:
 
 ### Connect to the instances
 
-Get the public IP address of the created instances (the public IP address looks like this for example: 34.244.xx.xxx):
+Get the **public** IP address of the created instances (the public IP address looks like this for example: 34.244.xx.xxx):
 
 ```bash
 aws ec2 describe-instances \
@@ -142,12 +142,12 @@ Install K6:
 
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
     echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-    sudo apt-get update
-    sudo apt-get install k6
+    sudo apt update
+    sudo apt -y install k6
 }
 ```
 
-## Execute
+## Perform the test
 
 #### Servings instance
 
@@ -166,21 +166,21 @@ docker-compose -f docker-compose.gpu.yml up triton
 
 #### Middleware instance
 
-First, obtain the private DNS address of the serving instance. This is what the command `aws ec2 describe-instances` you ran above printed out. This value should look something like this: `ec2-34-24x-xxx-xxx.eu-west-1.compute.amazonaws.com`.
+First, obtain the **private** DNS address of the serving instance. This is what the command `aws ec2 describe-instances` you ran above printed out. This value should look something like this: `ip-192-168-xx-xx.eu-west-1.compute.internal`.
 
 ```
 git clone -–depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
 cd serving-compare-middleware/
 cat << EOF > .env
-TFSERVING_SERVICE_URL=http://ec2-34-24x-xxx-xxx.eu-west-1.compute.amazonaws.com:8501/v1/models/resnet_50_classification:predict
-TORCHSERVE_SERVICE_URL=http://ec2-34-24x-xxx-xxx.eu-west-1.compute.amazonaws.com:8080/predictions/resnet-50
-TRITON_SERVICE_HOST=ec2-34-24x-xxx-xxx.eu-west-1.compute.amazonaws.com:8000
+TFSERVING_SERVICE_URL=http://ip-192-168-xx-xx.eu-west-1.compute.internal:8501/v1/models/resnet_50_classification:predict
+TORCHSERVE_SERVICE_URL=http://ip-192-168-xx-xx.eu-west-1.compute.internal:8080/predictions/resnet-50
+TRITON_SERVICE_HOST=ip-192-168-xx-xx.eu-west-1.compute.internal:8000
 EOF
 
 docker-compose --file docker-compose.gpu.yml up --detach --build web
 ```
 
-And now you can run K6 for load testing: 
+Now you can run K6 for load testing: 
 
 ```
 k6 run --vus 10 --duration 20s \
