@@ -306,3 +306,4 @@ dist
 ### Custom
 .git/
 models/
+data/
