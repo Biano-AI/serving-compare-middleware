@@ -20,3 +20,9 @@ tasks:
     cmds:
       - docker build -t bianoai/serving-compare-middleware .
     silent: false
+
+  loadtest:
+    desc: Build Docker image
+    cmds:
+      - k6 run script.js
+    silent: false
