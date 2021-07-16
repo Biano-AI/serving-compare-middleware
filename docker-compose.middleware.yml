@@ -1,9 +1,8 @@
 version: "3.9"
 
-
-
 services:
   web:
+    network_mode: host
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -27,9 +26,4 @@ services:
       - tfserving
       - torchserve
       - triton
-#    environment:
-#      - TFSERVING_SERVICE_URL=http://tfserving:8501/v1/models/resnet_50_classification:predict
-#      - TORCHSERVE_SERVICE_URL=http://torchserve:8080/predictions/resnet-50
-#      - TRITON_SERVICE_HOST=triton:8000
-#      - DATA_DIR=/data
     restart: on-failure
