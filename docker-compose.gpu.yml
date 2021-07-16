@@ -4,6 +4,7 @@ services:
   tfserving:
     image: tensorflow/serving:2.5.1-gpu
     runtime: nvidia
+    shm_size: '1gb'
     command:
       - --model_name=resnet_50_classification
       - --model_base_path=/models/
@@ -28,6 +29,7 @@ services:
   torchserve:
     image: pytorch/torchserve:0.4.0-gpu
     runtime: nvidia
+    shm_size: '1gb'
     command:
       - torchserve
       - --model-store=/models/
@@ -49,8 +51,11 @@ services:
     restart: on-failure
 
   triton:
-    image: nvcr.io/nvidia/tritonserver:21.05-py3
+    # This is compatible with DLAMI
+    # https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/rel_20-09.html#rel_20-09
+    image: nvcr.io/nvidia/tritonserver:20.09-py3
     runtime: nvidia
+    shm_size: '1gb'
     command:
       - tritonserver
       - --model-repository=/models
