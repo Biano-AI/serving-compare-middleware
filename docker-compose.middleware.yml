@@ -22,8 +22,4 @@ services:
         source: ./data/
         target: /data/
         read_only: true
-    depends_on:
-      - tfserving
-      - torchserve
-      - triton
     restart: on-failure
