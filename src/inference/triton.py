@@ -33,7 +33,7 @@ async def triton_tensorflow_inference(image_content: BinaryIO, **kwargs):
     triton_client = make_triton_client()
 
     jpeg_rgb = Image.open(image_content).convert("RGB")
-    jpeg_rgb.thumbnail((224, 224))
+    jpeg_rgb = jpeg_rgb.resize((224, 224))
     jpeg_rgb = np.expand_dims(np.array(jpeg_rgb) / 255.0, 0).astype(np.float32)
 
     infer_input = InferInput("input_1", [1, 224, 224, 3], "FP32")
@@ -48,7 +48,7 @@ async def triton_pytorch_inference(image_content: BinaryIO, **kwargs):
     triton_client = make_triton_client()
 
     jpeg_rgb = Image.open(image_content).convert("RGB")
-    jpeg_rgb.thumbnail((224, 224))
+    jpeg_rgb = jpeg_rgb.resize((224, 224))
     normalized_jpeg = (np.array(jpeg_rgb) - np.array([0.485, 0.456, 0.406])) / np.array([0.229, 0.224, 0.225])
     normalized_jpeg = np.expand_dims(np.einsum("ijk->kij", np.array(normalized_jpeg)), 0).astype(np.float32)
 
