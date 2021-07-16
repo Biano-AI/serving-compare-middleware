@@ -1,0 +1,35 @@
+version: "3.9"
+
+
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command:
+      - uvicorn
+      - api:main
+      - --host=0.0.0.0
+      - --workers=2
+      - --reload
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./
+        target: /app/
+      - type: bind
+        source: ./data/
+        target: /data/
+        read_only: true
+    depends_on:
+      - tfserving
+      - torchserve
+      - triton
+#    environment:
+#      - TFSERVING_SERVICE_URL=http://tfserving:8501/v1/models/resnet_50_classification:predict
+#      - TORCHSERVE_SERVICE_URL=http://torchserve:8080/predictions/resnet-50
+#      - TRITON_SERVICE_HOST=triton:8000
+#      - DATA_DIR=/data
+    restart: on-failure
