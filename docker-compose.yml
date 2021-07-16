@@ -73,8 +73,10 @@ services:
         source: ./configuration/torchserve/config.properties
         target: /configuration/config.properties
         read_only: true
-    expose:
-      - 8080
+#    expose:
+#      - 8080
+    ports:
+      - 8080:8080
     restart: on-failure
 
   triton:
