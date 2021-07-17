@@ -48,6 +48,25 @@ Let's create two instances:
 
 (This may take some time.)
 
+We will use two different AMIs. For the GPU instance we will use the latest (July 2021) [Deep learning AMI from AWS](https://aws.amazon.com/machine-learning/amis/) and for the CPU instance we will use the [LTS version of Ubuntu from Canonical](https://aws.amazon.com/marketplace/pp/prodview-iftkyuwv2sjxi).
+
+```bash
+aws ec2 describe-images \
+        --region eu-west-1 \
+        --owners amazon \
+        --filters "Name=name,Values=Deep Learning AMI (Ubuntu 18.04) Version *" "Name=state,Values=available" \
+        --query "reverse(sort_by(Images, &Name))[:1].ImageId" \
+        --output text
+        
+        
+aws ec2 describe-images \
+        --region eu-west-1 \
+        --owners 099720109477 \
+        --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*" "Name=state,Values=available" \
+        --query "reverse(sort_by(Images, &Name))[:1].ImageId" \
+        --output text
+```
+
 ```bash
 {
     # This instance is for servings
