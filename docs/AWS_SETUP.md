@@ -118,7 +118,7 @@ Install Docker Compose:
 }
 ```
 
-#### Second instance: Servings (the one with the CPU) 
+#### Second instance: Middleware (the one with the CPU) 
 
 Install Docker:
 
@@ -153,6 +153,29 @@ Install K6:
 
 ## Perform the test
 
+* * *
+:warning: 
+
+Toto později odstraníme:
+
+PRotože je toto GIT repo současně privátní, musí se na obou instancích vygenerovat klíče:
+
+
+```
+ssh-keygen -t ed25519
+```
+
+A přidat je jako Deployment key sem: https://github.com/Biano-AI/serving-compare-middleware/settings/keys
+
+```
+cat .ssh/id_ed25519.pub
+```
+
+Jedině tak bude fungovat `git clone ...` na privátním repu.
+
+:warning: 
+* * *
+
 #### Servings instance
 
 ```bash
@@ -184,7 +207,7 @@ EOF
 docker-compose --file docker-compose.gpu.yml up --detach --build web
 ```
 
-Now you can run K6 for load testing: 
+Now you can run K6 for load testing. Between each test, you must stop the running serving (<kbd>CTRL</kbd>+<kbd>C</kbd>) on the GPU instance and start the next one.
 
 ```
 k6 run --vus 10 --duration 20s \
