@@ -182,13 +182,13 @@ Jedině tak bude fungovat `git clone ...` na privátním repu.
 git clone -–depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
 cd serving-compare-middleware/
 
-docker-compose -f docker-compose.gpu.yml up tfserving
+docker-compose -f docker-compose.test.yml up tfserving
 
 # and then after testing:
-docker-compose -f docker-compose.gpu.yml up torchserve
+docker-compose -f docker-compose.test.yml up torchserve
 
 # and finally:
-docker-compose -f docker-compose.gpu.yml up triton
+docker-compose -f docker-compose.test.yml up triton
 ```
 
 #### Middleware instance
@@ -204,7 +204,7 @@ TORCHSERVE_SERVICE_URL=http://ip-192-168-xx-xx.eu-west-1.compute.internal:8080/p
 TRITON_SERVICE_HOST=ip-192-168-xx-xx.eu-west-1.compute.internal:8000
 EOF
 
-docker-compose --file docker-compose.gpu.yml up --detach --build web
+docker-compose --file docker-compose.test.yml up --detach --build web
 ```
 
 Now you can run K6 for load testing. Between each test, you must stop the running serving (<kbd>CTRL</kbd>+<kbd>C</kbd>) on the GPU instance and start the next one.
