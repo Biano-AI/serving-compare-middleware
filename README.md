@@ -11,7 +11,7 @@ This project has been created to support a paper to test the performance of sele
 The resulting JSON API is really not complicated at all. All you need is a curl like this:
 
 ```bash
-$ curl -vS http://localhost:8000/infer/${SERVING_TYPE} \
+curl -vS http://localhost:8000/infer/${SERVING_TYPE} \
         -F "image=@path/to/local/image.JPG"
 ```
 

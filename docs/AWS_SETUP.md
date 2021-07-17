@@ -1,5 +1,9 @@
 # Set up test instances in AWS
 
+This document will guide you through deploying the project on your own servers in AWS.
+
+![deployment.png](deployment.png)
+
 ## Prerequisites
 
 1. Install [awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) on your local computer
@@ -9,7 +13,7 @@
 
 ## Security prerequisites for EC2 instances
 
-First, you need to import your public key into the AWS so that you can connect to the instance later using SSH.
+First, you need to import your public key into the AWS account so that you can connect to the instances later using SSH.
 
 ```bash
 aws ec2 import-key-pair --key-name "key-servings-test" --public-key-material fileb://~/.ssh/id_rsa.pub
