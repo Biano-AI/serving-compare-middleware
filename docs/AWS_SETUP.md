@@ -99,34 +99,26 @@ aws ec2 describe-images \
 }
 ```
 
-### Connect to the instances
-
-Get the **public** IP address of the created instances (the public IP address looks like this for example: 34.244.xx.xxx):
-
-```bash
-aws ec2 describe-instances \
-        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Servings-Experiment" \
-        --query 'Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, PrivateDnsName]' \
-        --output json
-        
-aws ec2 describe-instances \
-        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Middleware-Experiment" \
-        --query 'Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, PrivateDnsName]' \
-        --output json
-```
-
-You should be able to connect to these instances using SSH:
-
-```bash
-ssh ubuntu@IP-ADDRESS-FOR-SERVINGS
-ssh ubuntu@IP-ADDRESS-FOR-MIDDLEWARE
-```
-
 ### Setup
 
 Now we need to install the necessary software on each instance.
 
 #### First instance: Servings (the one with the GPU) 
+
+```bash
+IP_ADDRESS_SERVINGS=$(aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Servings-Experiment" \
+        --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
+        --output text)
+
+echo "servings IP: $IP_ADDRESS_SERVINGS"
+```
+
+If IP is empty, wait some time. Otherwise you can continue with:
+
+```bash
+ssh ubuntu@${IP_ADDRESS_SERVINGS}
+```
 
 Install Docker Compose:
 
@@ -138,6 +130,21 @@ Install Docker Compose:
 ```
 
 #### Second instance: Middleware (the one with the CPU) 
+
+```bash
+IP_ADDRESS_MIDDLEWARE=$(aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Middleware-Experiment" \
+        --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
+        --output text)
+        
+echo "middleware IP: $IP_ADDRESS_MIDDLEWARE"
+```
+
+If IP is empty, wait some time. Otherwise you can continue with:
+
+```bash
+ssh ubuntu@${IP_ADDRESS_MIDDLEWARE}
+```
 
 Install Docker:
 
@@ -198,7 +205,7 @@ Jedině tak bude fungovat `git clone ...` na privátním repu.
 #### Servings instance
 
 ```bash
-git clone -–depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
+git clone --depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
 cd serving-compare-middleware/
 
 docker-compose -f docker-compose.test.yml up tfserving
@@ -212,17 +219,40 @@ docker-compose -f docker-compose.test.yml up triton
 
 #### Middleware instance
 
-First, obtain the **private** DNS address of the serving instance. This is what the command `aws ec2 describe-instances` you ran above printed out. This value should look something like this: `ip-192-168-xx-xx.eu-west-1.compute.internal`.
-
+```bash
+ssh ubuntu@${IP_ADDRESS_MIDDLEWARE}
 ```
-git clone -–depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
-cd serving-compare-middleware/
-cat << EOF > .env
-TFSERVING_SERVICE_URL=http://ip-192-168-xx-xx.eu-west-1.compute.internal:8501/v1/models/resnet_50_classification:predict
-TORCHSERVE_SERVICE_URL=http://ip-192-168-xx-xx.eu-west-1.compute.internal:8080/predictions/resnet-50
-TRITON_SERVICE_HOST=ip-192-168-xx-xx.eu-west-1.compute.internal:8000
-EOF
+Clone middleware repository:
 
+```bash
+git clone --depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
+```
+
+We need to configure servings now. 
+
+From your local machine run:
+```bash
+PRIVATE_DNS_SERVINGS=$(aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Servings-Experiment" \
+        --query 'Reservations[*].Instances[*].[PrivateDnsName]' \
+        --output text)
+```
+
+```bash
+echo ${PRIVATE_DNS_SERVINGS}
+```
+This value is **private** DNS address of the serving instance and it should look something like this: `ip-192-168-xx-xx.eu-west-1.compute.internal`.
+Next step is to create env variables for middleware.
+```bash
+cat <<EOF | ssh -i .ssh/id_rsa_biano ubuntu@${IP_ADDRESS_MIDDLEWARE} 'cat > ~/serving-compare-middleware/.env' 
+TFSERVING_SERVICE_URL=http://${PRIVATE_DNS_SERVINGS}:8501/v1/models/resnet_50_classification:predict  
+TORCHSERVE_SERVICE_URL=http://${PRIVATE_DNS_SERVINGS}:8080/predictions/resnet-50  
+TRITON_SERVICE_HOST=http://${PRIVATE_DNS_SERVINGS}:8000
+EOF
+```
+
+Than you can run middleware API on the middleware machine:
+```bash
 docker-compose --file docker-compose.test.yml up --detach --build web
 ```
 
@@ -258,8 +288,21 @@ k6 run --vus 10 --duration 20s \
     aws ec2 delete-security-group --group-name security-group-t-middleware
 }
 
-aws ec2 terminate-instances --instance-ids i-0xxx
-aws ec2 terminate-instances --instance-ids i-0xxx
+
+
+ID_SERVINGS=$(aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Servings-Experiment" \
+        --query 'Reservations[*].Instances[*].[InstanceId]' \
+        --output text)
+
+
+ID_MIDDLEWARE=$(aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=Middleware-Experiment" \
+        --query 'Reservations[*].Instances[*].[InstanceId]' \
+        --output text)
+        
+aws ec2 terminate-instances --instance-ids ${ID_SERVINGS}
+aws ec2 terminate-instances --instance-ids ${ID_MIDDLEWARE}
 
 aws ec2 delete-key-pair --key-name key-servings-test
 ```
