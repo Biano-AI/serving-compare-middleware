@@ -1,0 +1,23 @@
+{
+  "name": "serving-compare-middleware",
+  "version": "1.0.0",
+  "description": "This server, written in [FastAPI](https://fastapi.tiangolo.com/), serves as middleware between the client and selected ML model serving tools ([Tensorflow Serving](https://github.com/tensorflow/serving), [TorchServe](https://github.com/pytorch/serve) and [NVIDIA Triton](https://github.com/triton-inference-server/server)).",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Biano-AI/serving-compare-middleware.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Biano-AI/serving-compare-middleware/issues"
+  },
+  "homepage": "https://github.com/Biano-AI/serving-compare-middleware#readme",
+  "devDependencies": {
+    "@types/k6": "^0.32.2"
+  }
+}

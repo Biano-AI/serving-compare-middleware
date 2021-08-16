@@ -1,0 +1,2 @@
+gunicorn==20.1.0 ; sys_platform != 'win32' # https://github.com/benoitc/gunicorn
+setproctitle ; sys_platform != 'win32' # https://github.com/dvarrazzo/py-setproctitle

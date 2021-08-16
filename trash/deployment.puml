@@ -1,0 +1,30 @@
+@startuml
+
+cloud "AWS private network" {
+    node Servings [
+        Servings node
+        GPU support
+        ====
+        * TFServing
+        * Torchserve
+        * Triton
+    ]
+
+
+    node Middleware [
+        Middleware node
+        CPU support
+        ====
+        * K6
+        * FastAPI middleware
+    ]
+}
+
+actor Developer
+
+Middleware ..> Servings : Request over private network
+
+Developer --> Servings : Controls via SSH
+Developer --> Middleware : Controls via SSH
+
+@enduml

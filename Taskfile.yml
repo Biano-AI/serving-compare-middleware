@@ -1,0 +1,28 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  mypy:
+    desc: Run mypy on sources
+    cmds:
+      - mypy ./src/
+    silent: false
+
+  uvicorn:
+    desc: Run uvicorn for development
+    cmds:
+      - uvicorn api:main --workers=2 --reload
+    silent: false
+
+  docker:build:
+    desc: Build Docker image
+    cmds:
+      - docker build -t bianoai/serving-compare-middleware .
+    silent: false
+
+  loadtest:
+    desc: Build Docker image
+    cmds:
+      - k6 run script.js
+    silent: false
