@@ -29,11 +29,11 @@ Where `SERVING_TYPE` can be one of:
 
 ## About our team
 
-TBD
+See: https://biano-ai.github.io/about-biano-ai/
 
 ## Contact us
 
-TBD
+See: https://biano-ai.github.io/about-biano-ai/
 
 
 ## License
