@@ -75,8 +75,20 @@ async def _(*, serving_type: Servings, random_image: Path = Depends(get_random_i
         await torchserve_grpc(image_content)
     elif serving_type == Servings.tfserving:
         await tfserving_grpc(image_content)
+    elif serving_type == Servings.triton_pytorch:
+        await triton_pytorch_grpc(image_content)
+    elif serving_type == Servings.triton_tensorflow:
+        await triton_tensorflow_grpc(image_content)
 
     return "OK"
+
+
+async def triton_pytorch_grpc(image_content: BinaryIO) -> None:
+    raise NotImplementedError()
+
+
+async def triton_tensorflow_grpc(image_content: BinaryIO) -> None:
+    raise NotImplementedError()
 
 
 async def tfserving_grpc(image_content: BinaryIO) -> None:
