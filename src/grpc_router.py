@@ -62,8 +62,7 @@ async def _(
 async def _(
     *,
     serving_type: Servings,
-    random_image: Path = Depends(get_random_image),
-    client: httpx.AsyncClient = Depends(httpx_client),
+    random_image: Path = Depends(get_random_image)
 ) -> str:
     """
     Performs inference for the input image (JPEG).
