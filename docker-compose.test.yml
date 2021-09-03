@@ -46,6 +46,7 @@ services:
         read_only: true
     ports:
       - 8501:8501
+      - 9000:9000
     restart: on-failure
 
   torchserve:
@@ -70,6 +71,7 @@ services:
         read_only: true
     ports:
       - 8080:8080
+      - 7070:7070
     restart: on-failure
 
   triton:
