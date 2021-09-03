@@ -1,32 +1,32 @@
 version: "3.9"
 
 services:
-#  web:
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-#    command:
-#      - uvicorn
-#      - api:main
-#      - --host=0.0.0.0
-#      - --workers=2
-#      - --reload
-#    ports:
-#      - 8000:8000
-#    volumes:
-#      - type: bind
-#        source: ./
-#        target: /app/
-#      - type: bind
-#        source: ./data/
-#        target: /data/
-#        read_only: true
-#    restart: on-failure
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command:
+      - uvicorn
+      - api:main
+      - --host=0.0.0.0
+      - --workers=2
+      - --reload
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./
+        target: /app/
+      - type: bind
+        source: ./data/
+        target: /data/
+        read_only: true
+    restart: on-failure
 
   tfserving:
-    image: tensorflow/serving:2.5.1
-#    runtime: nvidia
-#    shm_size: '1gb'
+    image: tensorflow/serving:2.5.1-gpu
+    runtime: nvidia
+    shm_size: '1gb'
     command:
       - --model_name=resnet_50_classification
       - --model_base_path=/models/
@@ -45,59 +45,58 @@ services:
         target: /models/
         read_only: true
     ports:
-      - 9000:9000
+      - 8501:8501
     restart: on-failure
 
-#  torchserve:
-#    image: pytorch/torchserve:0.4.2-cpu
-##    runtime: nvidia
-##    shm_size: '1gb'
-#    command:
-#      - torchserve
-#      - --model-store=/models/
-#      - --start
-#      - --foreground
-#      - --models=all
-#      - --ts-config=/configuration/config.properties
-#    volumes:
-#      - type: bind
-#        source: ./models/torchserve/
-#        target: /models/
-#        read_only: true
-#      - type: bind
-#        source: ./configuration/torchserve/config.properties
-#        target: /configuration/config.properties
-#        read_only: true
-#    ports:
-##      - 8080:8080
-#      - 7070:7070
-#    restart: on-failure
+  torchserve:
+    image: pytorch/torchserve:0.4.0-gpu
+    runtime: nvidia
+    shm_size: '1gb'
+    command:
+      - torchserve
+      - --model-store=/models/
+      - --start
+      - --foreground
+      - --models=all
+      - --ts-config=/configuration/config.properties
+    volumes:
+      - type: bind
+        source: ./models/torchserve/
+        target: /models/
+        read_only: true
+      - type: bind
+        source: ./configuration/torchserve/config.properties
+        target: /configuration/config.properties
+        read_only: true
+    ports:
+      - 8080:8080
+    restart: on-failure
 
-#  triton:
-#    # This is compatible with the latest DLAMI
-#    # https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/rel_20-09.html#rel_20-09
-#    image: nvcr.io/nvidia/tritonserver:20.10-py3
-#    runtime: nvidia
-#    shm_size: '1gb'
-#    command:
-#      - tritonserver
-#      - --model-repository=/models
-#      - --model-control-mode=none
-#      - --allow-grpc=false
-#      - --allow-http=true
-#      - --log-verbose=true
-#      - --log-info=true
-#      - --log-warning=true
-#      - --log-error=true
-#      - --exit-on-error=true
-#      - --strict-model-config=true
-#      - --strict-readiness=true
-#      - --exit-timeout-secs=10
-#    ports:
-#      - 8000:8000
-#    volumes:
-#      - type: bind
-#        source: ./models/triton/
-#        target: /models/
-#        read_only: true
-#    restart: on-failure
+  triton:
+    # This is compatible with the latest DLAMI
+    # https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/rel_20-09.html#rel_20-09
+    image: nvcr.io/nvidia/tritonserver:20.10-py3
+    runtime: nvidia
+    shm_size: '1gb'
+    command:
+      - tritonserver
+      - --model-repository=/models
+      - --model-control-mode=none
+      - --allow-grpc=false
+      - --allow-http=true
+      - --log-verbose=true
+      - --log-info=true
+      - --log-warning=true
+      - --log-error=true
+      - --exit-on-error=true
+      - --strict-model-config=true
+      - --strict-readiness=true
+      - --exit-timeout-secs=10
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./models/triton/
+        target: /models/
+        read_only: true
+    restart: on-failure
