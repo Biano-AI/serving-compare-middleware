@@ -23,6 +23,12 @@ async def make_httpx_client():
 
 
 @cache
-def make_triton_client() -> InferenceServerClient:
+def make_triton_http_client() -> InferenceServerClient:
     from tritonclient.http import InferenceServerClient
     return InferenceServerClient(url=get_settings().triton_service_host)
+
+
+@cache
+def make_triton_grpc_client() -> InferenceServerClient:
+    from tritonclient.grpc import InferenceServerClient
+    return InferenceServerClient(url=get_settings().triton_grpc_host)
