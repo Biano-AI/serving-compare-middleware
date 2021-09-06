@@ -19,7 +19,7 @@ from PIL import Image
 from tensorflow import make_tensor_proto
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 
-from src.dependencies import get_random_image, httpx_client
+from src.dependencies import get_random_image, get_settings, httpx_client
 from src.inference import AVAILABLE_SERVINGS
 from src.torchserve_grpc_inference_client import inference_pb2, inference_pb2_grpc
 from src.types import Servings
@@ -71,6 +71,7 @@ async def _(*, serving_type: Servings, random_image: Path = Depends(get_random_i
     async with aiofiles.open(random_image, mode="rb") as f:
         image_content = io.BytesIO(await f.read())
 
+    # TODO This is ugly
     if serving_type == Servings.torchserve:
         await torchserve_grpc(image_content)
     elif serving_type == Servings.tfserving:
@@ -92,7 +93,7 @@ async def triton_tensorflow_grpc(image_content: BinaryIO) -> None:
 
 
 async def tfserving_grpc(image_content: BinaryIO) -> None:
-    async with grpc.aio.insecure_channel("localhost:9000") as channel:
+    async with grpc.aio.insecure_channel(get_settings().tfserving_grpc_host) as channel:
         stub_tf = prediction_service_pb2_grpc.PredictionServiceStub(channel)
 
         request = predict_pb2.PredictRequest()
@@ -110,7 +111,7 @@ async def tfserving_grpc(image_content: BinaryIO) -> None:
 
 
 async def torchserve_grpc(image_content: BinaryIO) -> None:
-    async with grpc.aio.insecure_channel("localhost:7070") as channel:
+    async with grpc.aio.insecure_channel(get_settings().torchserve_grpc_host) as channel:
         stub = inference_pb2_grpc.InferenceAPIsServiceStub(channel)
         input_data = {"data": image_content.read()}
         response = await stub.Predictions(inference_pb2.PredictionsRequest(model_name="resnet-50", input=input_data))
