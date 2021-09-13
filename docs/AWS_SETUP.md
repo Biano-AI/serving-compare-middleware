@@ -182,7 +182,7 @@ Install K6:
 #### Servings instance
 
 ```bash
-git clone --depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
+git clone --depth 1 https://github.com/Biano-AI/serving-compare-middleware.git
 cd serving-compare-middleware/
 
 docker-compose -f docker-compose.test.yml up tfserving
@@ -202,7 +202,7 @@ ssh ubuntu@${IP_ADDRESS_MIDDLEWARE}
 Clone middleware repository:
 
 ```bash
-git clone --depth 1 git@github.com:Biano-AI/serving-compare-middleware.git
+git clone --depth 1 https://github.com/Biano-AI/serving-compare-middleware.git
 ```
 
 We need to configure servings now. 
