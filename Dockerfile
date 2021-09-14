@@ -20,15 +20,15 @@ WORKDIR /app
 RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
 
 COPY ./requirements/production.txt /requirements/
-RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/production.txt \
+RUN pip install --use-deprecated=legacy-resolver --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/production.txt \
     && rm -rf /requirements/production.txt
 
 COPY ./requirements/base.txt /requirements/
-RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/base.txt \
+RUN pip install --use-deprecated=legacy-resolver --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir -r /requirements/base.txt \
     && rm -rf /requirements/base.txt
 
-RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
-RUN pip install --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir tritonclient[http]
+RUN pip install --use-deprecated=legacy-resolver --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir nvidia-pyindex
+RUN pip install --use-deprecated=legacy-resolver --isolated --no-input --compile --exists-action=a --disable-pip-version-check --no-cache-dir tritonclient[http]
 
 # ---------------------------------------------------------------------
 # 4. App sources
