@@ -31,9 +31,17 @@ MY_IP=$(curl -sS https://checkip.amazonaws.com/)
     aws ec2 authorize-security-group-ingress --group-name security-group-t-middleware --protocol tcp --port 22 --cidr "${MY_IP}"/32
     aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 22 --cidr "${MY_IP}"/32
     
+    # Torchserve HTTP and GRPC:
     aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 8080 --source-group security-group-t-middleware
+    aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 7070 --source-group security-group-t-middleware
+    
+    # TFserving HTTP and GRPC:
     aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 8501 --source-group security-group-t-middleware
+    aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 9000 --source-group security-group-t-middleware
+    
+    # Triton HTTP and GRPC:
     aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 8000 --source-group security-group-t-middleware
+    aws ec2 authorize-security-group-ingress --group-name security-group-t-servings --protocol tcp --port 8001 --source-group security-group-t-middleware
 }
 ```
 

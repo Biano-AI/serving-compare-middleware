@@ -8,7 +8,7 @@ from typing import Final
 
 from fastapi import FastAPI
 
-from src import common_router, factories
+from src import http_router, factories, grpc_router
 
 logger: Final = logging.getLogger(__name__)
 
@@ -18,7 +18,8 @@ main = FastAPI(
     version="0.1.0",
     redoc_url=None,
 )
-main.include_router(common_router.router, tags=["inference"])
+main.include_router(http_router.router, tags=["inference-http"])
+main.include_router(grpc_router.router, prefix="/grpc", tags=["inference-grpc"])
 
 
 @main.on_event("startup")

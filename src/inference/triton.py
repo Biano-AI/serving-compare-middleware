@@ -10,7 +10,7 @@ from typing import BinaryIO, Final
 import numpy as np
 from PIL import Image
 
-from src.factories import make_triton_client
+from src.factories import make_triton_http_client
 
 logger: Final = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ except ImportError as e:
 
 
 async def triton_tensorflow_inference(image_content: BinaryIO, **kwargs):
-    triton_client = make_triton_client()
+    triton_client = make_triton_http_client()
 
     jpeg_rgb = Image.open(image_content).convert("RGB")
     jpeg_rgb = jpeg_rgb.resize((224, 224))
@@ -45,7 +45,7 @@ async def triton_tensorflow_inference(image_content: BinaryIO, **kwargs):
 
 
 async def triton_pytorch_inference(image_content: BinaryIO, **kwargs):
-    triton_client = make_triton_client()
+    triton_client = make_triton_http_client()
 
     jpeg_rgb = Image.open(image_content).convert("RGB")
     jpeg_rgb = jpeg_rgb.resize((224, 224))
