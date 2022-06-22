@@ -13,7 +13,7 @@ aiofiles==0.7.0
 # TF Serving
 # ------------------------------------------------------------------------------
 Pillow==9.0.1
-numpy==1.21.2
+numpy==1.22.0
 tensorflow-serving-api==2.6.0
 
 # GRPCIO
