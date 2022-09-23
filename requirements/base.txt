@@ -19,7 +19,7 @@ tensorflow-serving-api==2.6.0
 # GRPCIO
 # ------------------------------------------------------------------------------
 grpcio==1.39.0
-protobuf==3.17.3
+protobuf==3.18.3
 grpcio-tools==1.39.0
 
 # NVIDIA Triton
